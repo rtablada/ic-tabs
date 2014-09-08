@@ -465,14 +465,17 @@ exports["default"] = Component.extend({
   selectFromTabsSelectedIndex: function() {
     var activeTab = this.get('tabs.activeTab');
     var selectedTab = this.get('tabs.selected-index');
+    var index, myIndex;
+
     if (activeTab === this) return; // this was just selected
 
     if (typeof selectedTab === 'string') {
-      var index = this.get('tabs.selected-index').toString();
+      index = this.get('tabs.selected-index').toString();
+      myIndex = this.get('index').toString();
     } else {
-      return selectedTab;
+      index = parseInt(selectedTab, 10);
+      var myIndex = this.get('index');
     }
-    var myIndex = this.get('index').toString();
     if (index === myIndex) {
       this.select();
     }
