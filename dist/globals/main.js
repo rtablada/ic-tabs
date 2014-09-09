@@ -568,7 +568,9 @@ exports["default"] = Component.extend({
 
   select: function(tab) {
     this.set('activeTab', tab);
-    this.set('selected-index', tab.get('index'));
+    if (tab) {
+      this.set('selected-index', tab.get('index'));
+    }
   },
 
   /**
