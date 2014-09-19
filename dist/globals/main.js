@@ -107,13 +107,25 @@ exports["default"] = Component.extend({
 
   unregisterTab: function(tab) {
     var tabs = this.get('tabs');
-    var index = tab.get('index');
+    var index = tab.get('index').toString();
     var parent = this.get('parentView');
     tabs.removeObject(tab);
     if (parent.get('activeTab') == tab) {
       if (tabs.get('length') === 0) return;
-      var index = (index === 0) ? index : index - 1;
-      var tab = tabs.objectAt(index);
+      var selectIndex = 0, tab;
+
+      tabs.forEach(function(tabInstance, key) {
+        debugger;
+        if (tabInstance.get('index').toString() === index) {
+          if (key === 0) {
+            selectIndex = key;
+          } else {
+            selectIndex = key - 1;
+          }
+        }
+      });
+
+      var tab = tabs.objectAt(selectIndex);
       parent.select(tab);
     }
   },
@@ -464,18 +476,9 @@ exports["default"] = Component.extend({
 
   selectFromTabsSelectedIndex: function() {
     var activeTab = this.get('tabs.activeTab');
-    var selectedTab = this.get('tabs.selected-index');
-    var index, myIndex;
-
     if (activeTab === this) return; // this was just selected
-
-    if (typeof selectedTab === 'string') {
-      index = this.get('tabs.selected-index').toString();
-      myIndex = this.get('index').toString();
-    } else {
-      index = parseInt(selectedTab, 10);
-      var myIndex = this.get('index');
-    }
+    var index = this.get('tabs.selected-index').toString();
+    var myIndex = this.get('index').toString();
     if (index === myIndex) {
       this.select();
     }
@@ -568,9 +571,7 @@ exports["default"] = Component.extend({
 
   select: function(tab) {
     this.set('activeTab', tab);
-    if (tab) {
-      this.set('selected-index', tab.get('index'));
-    }
+    this.set('selected-index', tab.get('index'));
   },
 
   /**
